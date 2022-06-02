@@ -1,0 +1,19 @@
+.chat-box{
+    max-height: 227px;
+    padding: 20px;
+    display: flex;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #fff;
+    font-size: 0.9em;
+    flex-direction: column-reverse;
+}
+
+.sender-name{
+    margin: 0px;
+}
+
+.username-span{
+    font-weight: bold;
+}
