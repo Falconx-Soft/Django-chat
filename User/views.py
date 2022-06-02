@@ -6,14 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 # Create your views here.
-@login_required(login_url='login')
-def home(request):
-	return render(request,'User/home.html')
+# @login_required(login_url='login')
+# def home(request):
+# 	return render(request,'User/home.html')
 
 def loginUser(request):
 
 	if request.user.is_authenticated:
-		return redirect('home')
+		return redirect('chat:home')
 	msg = None
 	if request.method == 'POST':
 		username = request.POST['username']
@@ -25,7 +25,7 @@ def loginUser(request):
 
 			if user is not None:
 				login(request, user)
-				return redirect('home')
+				return redirect('chat:home')
 			else:
 				msg = 'User/Something is wrong'
 		except:
