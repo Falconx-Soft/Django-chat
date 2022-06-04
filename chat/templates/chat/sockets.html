@@ -70,7 +70,7 @@ chatSocket.onmessage = function(message) {
 	// Handle joining (Client perspective)
 	if (data.join) {
 		console.log("Joining room " + data.join);
-		getUserInfo()
+		// getUserInfo()
 		getRoomChatMessages()
 		enableChatLogScrollListener()
 	}
@@ -344,7 +344,7 @@ function createOrReturnPrivateChat(id){
 	console.log("ajax call")
 	payload = {
 		"csrfmiddlewaretoken": "{{ csrf_token }}",
-		"order_id": 1,
+		"order_id": "{{r_id}}",
 	}
 	$.ajax({
 		type: 'POST',

@@ -4,3 +4,4 @@ from .models import*
 
 admin.site.register(PrivateChatRoom)
 admin.site.register(RoomChatMessage)
+admin.site.register(ChatRoomUsers)

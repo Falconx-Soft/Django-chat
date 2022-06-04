@@ -6,10 +6,12 @@ class PrivateChatRoom(models.Model):
 	"""
 	A private room for people to chat in.
 	"""
-	user1               = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user1")
-	user2               = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user2")
-
+	titel				= models.CharField(max_length=500, null=True)
 	is_active 			= models.BooleanField(default=False)
+
+
+	def __str__(self):
+		return self.titel+":"+str(self.id)
 
 	@property
 	def group_name(self):
@@ -18,6 +20,14 @@ class PrivateChatRoom(models.Model):
 		messages as they are generated.
 		"""
 		return f"PrivateChatRoom-{self.id}"
+	
+
+class ChatRoomUsers(models.Model):
+	user				= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user")
+	chatRoom			= models.ForeignKey(PrivateChatRoom, on_delete=models.CASCADE, related_name="chatRoom")
+
+	def __str__(self):
+		return self.user.username +":"+ str(self.chatRoom.id)
 
 
 class RoomChatMessageManager(models.Manager):

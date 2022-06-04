@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 import json
 from django.core.paginator import Paginator
 
-from chat.models import RoomChatMessage, PrivateChatRoom
+from chat.models import RoomChatMessage, PrivateChatRoom, ChatRoomUsers
 from User.utils import LazyAccountEncoder
 from chat.utils import calculate_timestamp, LazyRoomChatMessageEncoder
 from chat.constants import *
@@ -58,12 +58,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 				await self.display_progress_bar(False)
 			elif command == "get_user_info":
 				room = await get_room_or_error(content['room_id'], self.scope["user"])
-				payload = await get_user_info(room, self.scope["user"])
-				if payload != None:
-					payload = json.loads(payload)
-					await self.send_user_info_payload(payload['user_info'])
-				else:
-					raise ClientError(204, "Something went wrong retrieving the other users account details.")
+				# payload = await get_user_info(room, self.scope["user"])
+				# if payload != None:
+				# 	payload = json.loads(payload)
+				# 	await self.send_user_info_payload(payload['user_info'])
+				# else:
+				# 	raise ClientError(204, "Something went wrong retrieving the other users account details.")
 		except ClientError as e:
 			await self.handle_client_error(e)
 
@@ -295,7 +295,12 @@ def get_room_or_error(room_id, user):
 		raise ClientError("ROOM_INVALID", "Invalid room.")
 
 	# Is this user allowed in the room? (must be user1 or user2)
-	if user != room.user1 and user != room.user2:
+	room_users = ChatRoomUsers.objects.filter(chatRoom=room).values_list('user', flat=True)
+	if user.id not in room_users:
+		print(user.id)
+		print("************")
+		for u in room_users:
+			print(u)
 		raise ClientError("ROOM_ACCESS_DENIED", "You do not have permission to join this room.")
 
 	# Are the users in this room friends?

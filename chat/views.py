@@ -14,8 +14,19 @@ def home(request):
 	context = {
 		'debug':DEBUG,
 		'debug_mode':settings.DEBUG,
+		'r_id':1
 	}
 	return render(request,'chat/home.html',context)
+
+@login_required(login_url='login')
+def private_chat(request):
+
+	context = {
+		'debug':DEBUG,
+		'debug_mode':settings.DEBUG,
+		'r_id':2
+	}
+	return render(request,'chat/private.html',context)
 
 
 # Ajax call to return a private chatroom or create one if does not exist
